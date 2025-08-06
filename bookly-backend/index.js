@@ -5,6 +5,8 @@ const connectDb = require('./db/db')
 const authRoute = require('./routes/auth-routes')
 const slotRoutes = require('./routes/slot-routes')
 const bookingRoutes = require("./routes/booking-routes");
+const settingsRoutes = require('./routes/settings-routes')
+const publicRoute = require('./routes/public-routes')
 
 const app = express()
 
@@ -25,6 +27,8 @@ app.get("/", (req, res) => {
 app.use('/api/auth', authRoute)
 app.use("/api/slots", slotRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use('/api/public', publicRoute)
 
 app.listen(5000, ()=>{
     console.log('Server listening on port 5000');

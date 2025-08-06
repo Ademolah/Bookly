@@ -20,6 +20,17 @@ const verifyUser = (req, res, next) => {
   }
 };
 
+// routes/publicRoutes.js
+router.get("/slots/:ownerId", async (req, res) => {
+  try {
+    const slots = await Slot.find({ owner: req.params.ownerId });
+    res.json({ slots });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+
 // GET all slots for user
 router.get("/", verifyUser, async (req, res) => {
   try {
