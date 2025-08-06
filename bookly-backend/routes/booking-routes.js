@@ -60,6 +60,7 @@ router.post("/public", async (req, res) => {
 // GET all bookings for logged-in user
 router.get("/", verifyUser, async (req, res) => {
   try {
+    // console.log("Decoded userId from token:", req.user.id);
     const bookings = await Booking.find({ userId: req.user.id })
       .populate("slotId")
       .sort({ createdAt: -1 });

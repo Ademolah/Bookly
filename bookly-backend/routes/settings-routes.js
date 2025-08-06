@@ -2,6 +2,7 @@ const express = require("express");
 const Settings = require("../models/Settings");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const User = require('../models/Users')
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -19,17 +20,40 @@ const verifyUser = (req, res, next) => {
 };
 
 // GET /api/settings
+// router.get("/", verifyUser, async (req, res) => {
+//   try {
+//     let settings = await Settings.findOne({ userId: req.user.id });
+//     if (!settings) {
+//       settings = await Settings.create({ userId: req.user.id });
+//     }
+
+//     res.json(settings);
+//   } catch (err) {
+//     res.status(500).json({ msg: "Failed to load settings" });
+//   }
+// });
+
+// GET /api/settings
 router.get("/", verifyUser, async (req, res) => {
   try {
     let settings = await Settings.findOne({ userId: req.user.id });
     if (!settings) {
       settings = await Settings.create({ userId: req.user.id });
     }
-    res.json(settings);
+
+    // ✅ Fetch user's slug from User model
+    const user = await User.findById(req.user.id).select("slug");
+
+    res.json({
+      ...settings.toObject(), // Convert Mongoose doc to plain object
+      slug: user?.slug,       // Add slug explicitly
+    });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: "Failed to load settings" });
   }
 });
+
 
 // PUT /api/settings/update
 router.put("/update", verifyUser, async (req, res) => {

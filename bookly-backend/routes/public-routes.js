@@ -4,7 +4,7 @@ const router = express.Router();
 const Slot = require("../models/Slots");
 
 // GET public slots by owner ID
-router.get("/slots/:userId", async (req, res) => {
+router.get("/slots/:slug", async (req, res) => {
   try {
     const slots = await Slot.find({ owner: req.params.ownerId });
     res.json({ slots });
